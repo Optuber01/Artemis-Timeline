@@ -358,35 +358,30 @@
     transition: width 0.22s ease, flex-basis 0.22s ease, opacity 0.18s ease, transform 0.22s ease;
   }
   body.filter-sidebar-collapsed .filter-sidebar {
-    width: 42px;
-    flex-basis: 42px;
+    width: 36px;
+    flex-basis: 36px;
     overflow: visible;
   }
   body.meta-sidebar-collapsed .meta-panel {
-    width: 42px;
+    width: 36px;
     overflow: visible;
   }
-  body.filter-sidebar-collapsed .filter-sidebar .side-card,
+  body.filter-sidebar-collapsed .filter-sidebar > :not(.sidebar-rail),
   body.meta-sidebar-collapsed .meta-panel > :not(.sidebar-rail) {
-    opacity: 0;
-    pointer-events: none;
-    visibility: hidden;
+    display: none;
   }
   .sidebar-rail {
     display: none;
-    min-height: 140px;
     width: 36px;
-    border: 1px solid #242442;
-    background: #101020;
-    border-radius: 6px;
-    align-items: center;
+    min-height: 100%;
+    align-items: flex-start;
     justify-content: center;
+    padding-top: 0;
   }
   body.filter-sidebar-collapsed .filter-sidebar .sidebar-rail,
   body.meta-sidebar-collapsed .meta-panel .sidebar-rail {
     display: flex;
   }
-  .sidebar-rail button,
   .sidebar-collapse-btn {
     border: 1px solid #2a2a4e;
     background: #121225;
@@ -394,18 +389,6 @@
     cursor: pointer;
     font: inherit;
     transition: color 0.15s, border-color 0.15s, background 0.15s;
-  }
-  .sidebar-rail button {
-    width: 28px;
-    min-height: 112px;
-    border-radius: 5px;
-    font-size: 9px;
-    font-weight: 900;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    writing-mode: vertical-rl;
-  }
-  .sidebar-collapse-btn {
     width: 28px;
     height: 28px;
     border-radius: 4px;
@@ -413,17 +396,29 @@
     line-height: 1;
     flex-shrink: 0;
   }
-  .sidebar-rail button:hover,
   .sidebar-collapse-btn:hover {
     color: #fff;
     border-color: #4FC3F7;
     background: #17172e;
   }
-  .traj-section .sidebar-collapse-btn {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    z-index: 3;
+  .sidebar-rail .sidebar-collapse-btn {
+    margin-top: 0;
+  }
+  .meta-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-shrink: 0;
+    padding: 10px 12px;
+    background: #101020;
+    border: 1px solid #1a1a2e;
+    border-radius: 7px;
+  }
+  .meta-panel-title {
+    color: #e8e8f2;
+    font-size: 13px;
+    font-weight: 800;
   }
   .side-card {
     background: rgba(0,0,0,0.24);
@@ -511,12 +506,13 @@
     padding: 10px;
   }
   .audio-card-body #muteBtn {
-    justify-content: flex-start;
-    gap: 10px;
-    min-height: 42px;
-    padding: 8px 10px;
-    border-color: #2a2a4e;
-    background: #101020;
+    width: 100%;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 44px;
+    padding: 9px 10px;
+    border-color: #343456;
+    background: #111124;
     color: #d8d8e8;
     font-size: 11px;
     letter-spacing: 0.6px;
@@ -532,35 +528,32 @@
     color: #fff;
   }
   .audio-checkbox {
-    width: 24px;
-    height: 24px;
-    border: 1px solid currentColor;
-    border-radius: 50%;
+    width: 34px;
+    height: 18px;
+    border: 1px solid #4a4a68;
+    border-radius: 999px;
     position: relative;
     flex-shrink: 0;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    background: #090913;
     color: #ffd600;
+    transition: border-color 0.15s, background 0.15s;
   }
   .audio-checkbox::before {
     content: '';
     position: absolute;
-    left: 9px;
-    width: 0;
-    height: 0;
-    border-top: 5px solid transparent;
-    border-bottom: 5px solid transparent;
-    border-left: 7px solid currentColor;
+    top: 3px;
+    left: 3px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #7b7f93;
+    transition: transform 0.15s, background 0.15s;
   }
   #muteBtn.audio-on .audio-checkbox::before {
-    left: 7px;
-    width: 3px;
-    height: 11px;
-    border: 0;
-    border-left: 3px solid currentColor;
-    border-right: 3px solid currentColor;
+    transform: translateX(16px);
+    background: #ffd600;
   }
+  #muteBtn.audio-on .audio-checkbox { border-color: #ffd600; background: rgba(255,214,0,0.12); }
   .audio-button-copy {
     display: grid;
     gap: 2px;
@@ -581,7 +574,7 @@
   #muteBtn.audio-on .audio-button-subtitle { color: #ffd600; }
   .audio-player-shell {
     display: grid;
-    gap: 8px;
+    gap: 10px;
     padding: 9px;
     border: 1px solid #1a1a2e;
     border-radius: 6px;
@@ -599,6 +592,41 @@
   .audio-control-row {
     display: grid;
     gap: 6px;
+  }
+  .audio-options {
+    display: grid;
+    gap: 8px;
+  }
+  .audio-inline-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .audio-option {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #a6adbf;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+  .audio-option input {
+    width: 14px;
+    height: 14px;
+    accent-color: #ffd600;
+    flex-shrink: 0;
+  }
+  .audio-select {
+    border: 1px solid #2a2a4e;
+    background: #101020;
+    color: #e0e0e0;
+    border-radius: 4px;
+    padding: 5px 7px;
+    font: inherit;
+    font-size: 10px;
+    font-weight: 700;
   }
   .audio-control-label {
     display: flex;
@@ -649,25 +677,66 @@
     overflow: hidden;
     position: relative;
   }
-  .photo-status-row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 28px;
-    flex-shrink: 0;
-  }
   .photo-counter {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 6;
+    background: rgba(0,0,0,0.58);
+    border: 1px solid rgba(79,195,247,0.34);
+    border-radius: 999px;
+    padding: 5px 11px;
     color: #4FC3F7;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 800;
     letter-spacing: 0.7px;
     font-variant-numeric: tabular-nums;
+    pointer-events: none;
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+  .image-toolbar {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 6;
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 6px;
+    background: rgba(0,0,0,0.48);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+  .image-tool-btn {
+    width: 28px;
+    height: 28px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: #101020;
+    color: #cfd6e6;
+    border-radius: 4px;
+    cursor: pointer;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+  }
+  .image-tool-btn:hover {
+    color: #fff;
+    border-color: #4FC3F7;
+    background: #17172e;
   }
   .photo-img {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
     border-radius: 4px;
+    transition: transform 0.16s ease;
   }
   .photo-img.fullscreen {
     position: fixed;
@@ -1164,7 +1233,8 @@
     .controls-row { display: flex; padding: 6px 12px; gap: 6px; }
     .sidebar-toggle { display: none; }
     .sidebar-rail,
-    .sidebar-collapse-btn { display: none; }
+    .sidebar-collapse-btn,
+    .meta-panel-header { display: none; }
 
     /* Replace inline filter buttons with a single dropdown trigger + popup */
     .controls-row .filter-btn[data-filter],
@@ -1364,7 +1434,8 @@
       padding-bottom: calc(min(var(--vh) - var(--sheet-top-y), var(--sheet-middle-h)) + 4px);
     }
     .filter-sidebar { display: none; }
-    .photo-status-row { min-height: 0; }
+    .image-toolbar { top: 10px; left: 10px; }
+    .photo-counter { top: 10px; right: 10px; }
     /* Middle snap: let the photo extend slightly past the sheet's top edge
        so a sliver of image peeks through the rounded sheet corners. */
     body.sheet-state-middle .viewer {
@@ -1589,7 +1660,9 @@
 <!-- Main viewer -->
 <div class="viewer">
   <aside class="filter-sidebar" id="filterSidebar" aria-label="Filtering and audio controls">
-    <div class="sidebar-rail"><button type="button" data-sidebar="filters" id="filterSidebarRailToggle" aria-pressed="false">Filters</button></div>
+    <div class="sidebar-rail">
+      <button class="sidebar-collapse-btn" type="button" data-sidebar="filters" aria-label="Show filters">›</button>
+    </div>
     <div class="side-card">
       <div class="side-card-header">
         <div>
@@ -1652,6 +1725,26 @@
         </button>
         <div class="audio-player-shell">
           <audio class="mission-audio-player audio-disabled" id="missionAudioPlayer" controls preload="none" aria-label="Mission audio player"></audio>
+          <div class="audio-options">
+            <label class="audio-option">
+              <input type="checkbox" id="audioResumeToggle" checked>
+              Resume each clip where I left off
+            </label>
+            <label class="audio-option">
+              <input type="checkbox" id="audioRememberToggle" checked>
+              Remember audio settings
+            </label>
+            <div class="audio-inline-row">
+              <span class="audio-control-label">Speed</span>
+              <select class="audio-select" id="audioSpeed" aria-label="Mission audio speed">
+                <option value="0.75">0.75x</option>
+                <option value="1" selected>1x</option>
+                <option value="1.25">1.25x</option>
+                <option value="1.5">1.5x</option>
+                <option value="2">2x</option>
+              </select>
+            </div>
+          </div>
           <div class="audio-control-row">
             <div class="audio-control-label">
               <span>Volume</span>
@@ -1669,8 +1762,14 @@
       <img id="currentPhoto" class="photo-img" alt="Current photo">
       <video id="currentVideo" class="photo-img" style="display:none" controls playsinline preload="none"></video>
       <button class="photo-desc-btn" id="photoDescBtn" type="button" onclick="showDescPopup()" style="display:none">Show Desc</button>
+      <div class="image-toolbar" aria-label="Image controls">
+        <button class="image-tool-btn" id="imageZoomOutBtn" type="button" title="Zoom out">−</button>
+        <button class="image-tool-btn" id="imageZoomInBtn" type="button" title="Zoom in">+</button>
+        <button class="image-tool-btn" id="imageResetBtn" type="button" title="Reset zoom">1:1</button>
+        <button class="image-tool-btn" id="imageFullscreenBtn" type="button" title="Fullscreen">⛶</button>
+      </div>
+      <span class="info-text photo-counter" id="photoCounter">1 / 220</span>
     </div>
-    <div class="photo-status-row"><span class="info-text photo-counter" id="photoCounter">1 / 220</span></div>
     <button class="nav-arrow nav-prev" id="prevBtn" title="Previous photo">‹</button>
     <button class="nav-arrow nav-next" id="nextBtn" title="Next photo">›</button>
     <div class="photo-links">
@@ -1683,13 +1782,21 @@
     </div>
   </div>
   <div class="meta-panel" id="metaPanel">
-    <div class="sidebar-rail"><button type="button" data-sidebar="info" id="infoSidebarRailToggle" aria-pressed="false">Info</button></div>
+    <div class="sidebar-rail">
+      <button class="sidebar-collapse-btn" type="button" data-sidebar="info" aria-label="Show info">‹</button>
+    </div>
+    <div class="meta-panel-header">
+      <div>
+        <div class="side-card-kicker">Mission Context</div>
+        <div class="meta-panel-title">Info</div>
+      </div>
+      <button class="sidebar-collapse-btn" type="button" data-sidebar="info" id="infoSidebarToggle" aria-label="Collapse info">›</button>
+    </div>
     <div class="bottom-sheet-handle" id="sheetHandle" role="button" aria-label="Toggle information panel">
       <div class="sheet-handle-bar"></div>
       <div class="sheet-handle-title" id="sheetHandleTitle">Show More Information</div>
     </div>
     <div class="traj-section">
-      <button class="sidebar-collapse-btn" type="button" data-sidebar="info" id="infoSidebarToggle" aria-label="Collapse info">›</button>
       <canvas id="trajCanvas" width="400" height="200"></canvas>
       <div class="traj-label" id="trajLabel"></div>
     </div>
@@ -2407,8 +2514,12 @@ let currentPhotoIdx = 0;
 let filteredPhotos = PHOTOS;
 let audioMuted = true;
 let audioVolume = 0.7;
+let audioSpeed = 1;
+let audioResumeClips = true;
+let audioRememberSettings = true;
 let currentAudio = null;
 let lastAudioClip = null;
+let imageZoom = 1;
 
 // Full timeline range
 const T_START = PHOTOS[0].t;
@@ -2772,6 +2883,7 @@ function updatePhoto() {
     return;
   }
   const photo = filteredPhotos[currentPhotoIdx];
+  resetImageZoom();
   const safeSrc = encodeURIComponent(photo.f);
   const flickrId = getFlickrId(photo.f);
   const nasaTitle = flickrId ? PHOTO_TITLES[flickrId] || '' : '';
@@ -2909,7 +3021,15 @@ function updateAudio(ts) {
   player.pause();
   player.src = MEDIA_BASE + clip.f.replace(/ /g, '%20');
   player.volume = audioVolume;
+  player.playbackRate = audioSpeed;
   player.classList.remove('audio-disabled');
+  const savedTime = audioResumeClips ? Number(localStorage.getItem('artemisAudioTime:' + clip.f) || 0) : 0;
+  if (savedTime > 0) {
+    player.addEventListener('loadedmetadata', function restoreAudioTime() {
+      player.removeEventListener('loadedmetadata', restoreAudioTime);
+      if (savedTime < player.duration - 1) player.currentTime = savedTime;
+    });
+  }
   player.play().catch(() => {});
   currentAudio = player;
   lastAudioClip = clip.f;
@@ -2926,6 +3046,53 @@ function updateAudioControlState(clip) {
     title.textContent = 'Mute Mission Audio';
     subtitle.textContent = clip ? 'Now following timeline audio' : 'Waiting for an audio cue';
   }
+}
+
+function saveAudioPrefs() {
+  if (!audioRememberSettings) return;
+  localStorage.setItem('artemisAudioPrefs', JSON.stringify({
+    enabled: !audioMuted,
+    volume: audioVolume,
+    speed: audioSpeed,
+    resume: audioResumeClips,
+    remember: audioRememberSettings
+  }));
+}
+
+function loadAudioPrefs() {
+  try {
+    const prefs = JSON.parse(localStorage.getItem('artemisAudioPrefs') || '{}');
+    if (typeof prefs.volume === 'number') audioVolume = Math.max(0, Math.min(1, prefs.volume));
+    if (typeof prefs.speed === 'number') audioSpeed = prefs.speed;
+    if (typeof prefs.resume === 'boolean') audioResumeClips = prefs.resume;
+    if (typeof prefs.remember === 'boolean') audioRememberSettings = prefs.remember;
+    if (typeof prefs.enabled === 'boolean') audioMuted = !prefs.enabled;
+  } catch (_) {}
+}
+
+function syncAudioControlsFromState() {
+  const muteBtn = document.getElementById('muteBtn');
+  const volume = document.getElementById('audioVolume');
+  const volumeValue = document.getElementById('audioVolumeValue');
+  const speed = document.getElementById('audioSpeed');
+  const resume = document.getElementById('audioResumeToggle');
+  const remember = document.getElementById('audioRememberToggle');
+  const player = document.getElementById('missionAudioPlayer');
+  if (muteBtn) {
+    muteBtn.classList.toggle('audio-on', !audioMuted);
+    muteBtn.classList.toggle('active', !audioMuted);
+  }
+  if (volume) volume.value = Math.round(audioVolume * 100);
+  if (volumeValue) volumeValue.textContent = Math.round(audioVolume * 100) + '%';
+  if (speed) speed.value = String(audioSpeed);
+  if (resume) resume.checked = audioResumeClips;
+  if (remember) remember.checked = audioRememberSettings;
+  if (player) {
+    player.volume = audioVolume;
+    player.playbackRate = audioSpeed;
+  }
+  document.getElementById('audioDots').style.display = audioMuted ? 'none' : 'block';
+  updateAudioControlState();
 }
 
 // --- Timeline hover tooltip showing activity ---
@@ -3187,10 +3354,33 @@ function ensurePhotoInView() {
 
 function goPrev() { if (currentPhotoIdx > 0) { currentPhotoIdx--; updatePhoto(); ensurePhotoInView(); } }
 function goNext() { if (currentPhotoIdx < filteredPhotos.length - 1) { currentPhotoIdx++; updatePhoto(); ensurePhotoInView(); } }
-function toggleFullscreenPhoto() { const currentPhoto = document.getElementById("currentPhoto"); currentPhoto.classList.toggle("fullscreen"); }
+function activeMediaEl() {
+  const video = document.getElementById('currentVideo');
+  return video && video.style.display !== 'none' ? video : document.getElementById('currentPhoto');
+}
+function applyImageZoom() {
+  const img = document.getElementById('currentPhoto');
+  const video = document.getElementById('currentVideo');
+  const transform = `scale(${imageZoom})`;
+  if (img) img.style.transform = transform;
+  if (video) video.style.transform = transform;
+}
+function setImageZoom(nextZoom) {
+  imageZoom = Math.max(1, Math.min(4, nextZoom));
+  applyImageZoom();
+}
+function resetImageZoom() { imageZoom = 1; applyImageZoom(); }
+function toggleFullscreenPhoto() {
+  const media = activeMediaEl();
+  if (media) media.classList.toggle("fullscreen");
+}
 document.getElementById('prevBtn').addEventListener('click', goPrev);
 document.getElementById('nextBtn').addEventListener('click', goNext);
 document.getElementById("currentPhoto").addEventListener("click", toggleFullscreenPhoto);
+document.getElementById("imageZoomInBtn").addEventListener("click", (e) => { e.stopPropagation(); setImageZoom(imageZoom + 0.25); });
+document.getElementById("imageZoomOutBtn").addEventListener("click", (e) => { e.stopPropagation(); setImageZoom(imageZoom - 0.25); });
+document.getElementById("imageResetBtn").addEventListener("click", (e) => { e.stopPropagation(); resetImageZoom(); });
+document.getElementById("imageFullscreenBtn").addEventListener("click", (e) => { e.stopPropagation(); toggleFullscreenPhoto(); });
 
 
 // --- FILTERS ---
@@ -3285,29 +3475,48 @@ document.addEventListener('keydown', (e) => {
 
 document.getElementById('muteBtn').addEventListener('click', function() {
   audioMuted = !audioMuted;
-  this.classList.toggle('audio-on', !audioMuted);
-  this.classList.toggle('active', !audioMuted);
-  document.getElementById('audioDots').style.display = audioMuted ? 'none' : 'block';
   if (audioMuted && currentAudio) {
     currentAudio.pause();
     currentAudio.classList.add('audio-disabled');
     currentAudio = null;
     lastAudioClip = null;
     document.getElementById('audioNow').textContent = 'Audio is off';
-    updateAudioControlState();
   } else if (!audioMuted) {
     const photo = filteredPhotos[currentPhotoIdx];
     updateAudio(photo.t);
     renderTimeline();
-  } else {
-    updateAudioControlState();
   }
+  syncAudioControlsFromState();
+  saveAudioPrefs();
 });
 
 document.getElementById('audioVolume').addEventListener('input', function() {
   audioVolume = Number(this.value) / 100;
   document.getElementById('audioVolumeValue').textContent = this.value + '%';
   if (currentAudio) currentAudio.volume = audioVolume;
+  saveAudioPrefs();
+});
+
+document.getElementById('audioSpeed').addEventListener('change', function() {
+  audioSpeed = Number(this.value);
+  if (currentAudio) currentAudio.playbackRate = audioSpeed;
+  saveAudioPrefs();
+});
+
+document.getElementById('audioResumeToggle').addEventListener('change', function() {
+  audioResumeClips = this.checked;
+  saveAudioPrefs();
+});
+
+document.getElementById('audioRememberToggle').addEventListener('change', function() {
+  audioRememberSettings = this.checked;
+  if (audioRememberSettings) saveAudioPrefs();
+  else localStorage.removeItem('artemisAudioPrefs');
+});
+
+document.getElementById('missionAudioPlayer').addEventListener('timeupdate', function() {
+  if (!lastAudioClip || !audioResumeClips) return;
+  localStorage.setItem('artemisAudioTime:' + lastAudioClip, String(this.currentTime));
 });
 
 // --- DEEP LINKING ---
@@ -3340,6 +3549,8 @@ function navigateToHash() {
   return false;
 }
 
+loadAudioPrefs();
+syncAudioControlsFromState();
 navigateToHash();
 updatePhoto();
 

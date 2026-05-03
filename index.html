@@ -62,10 +62,24 @@
 
   /* Timeline bar — single line at top */
   .timeline-bar {
-    padding: 8px 20px;
+    padding: 8px 20px 7px;
     background: #0d0d1a;
     border-bottom: 1px solid #1a1a2e;
     flex-shrink: 0;
+  }
+  .timeline-topline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+  .timeline-title {
+    color: #667;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
   }
   .timeline-track {
     position: relative;
@@ -188,12 +202,9 @@
     pointer-events: none;
   }
   .zoom-controls {
-    position: absolute;
-    top: -4px;
-    right: -4px;
+    position: static;
     display: flex;
     gap: 4px;
-    z-index: 50;
     background: rgba(13, 13, 26, 0.92);
     padding: 3px;
     border-radius: 6px;
@@ -219,13 +230,13 @@
 
   /* Controls row */
   .controls-row {
-    display: flex;
+    display: none;
     align-items: center;
     gap: 8px;
     padding: 6px 20px;
     border-bottom: 1px solid #1a1a2e;
     flex-shrink: 0;
-    flex-wrap: wrap;
+    background: #0a0a14;
   }
   .btn {
     padding: 5px 14px;
@@ -256,6 +267,41 @@
   .controls-spacer { flex: 1; }
   .info-text { color: #4FC3F7; font-size: 12px; font-weight: 600; }
   .audio-now { color: #888; font-size: 10px; font-style: italic; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sidebar-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 10px;
+    border: 1px solid #242442;
+    background: #101020;
+    color: #9aa;
+    border-radius: 5px;
+    cursor: pointer;
+    font: inherit;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+  }
+  .sidebar-toggle:hover,
+  .sidebar-toggle.active {
+    color: #fff;
+    border-color: #4FC3F7;
+    background: #17172e;
+  }
+  .sidebar-toggle-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #4FC3F7;
+    box-shadow: 0 0 8px rgba(79,195,247,0.45);
+  }
+  body.filter-sidebar-collapsed .sidebar-toggle[data-sidebar="filters"] .sidebar-toggle-dot,
+  body.meta-sidebar-collapsed .sidebar-toggle[data-sidebar="info"] .sidebar-toggle-dot {
+    background: #445;
+    box-shadow: none;
+  }
 
   /* Centered nav bar above photo */
   .nav-bar {
@@ -285,8 +331,301 @@
     flex: 1;
     display: flex;
     min-height: 0;
-    padding: 12px 20px;
-    gap: 20px;
+    padding: 10px 20px 12px;
+    gap: 14px;
+  }
+  .media-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .filter-count {
+    color: #5f667a;
+    font-size: 9px;
+    font-weight: 800;
+    margin-left: auto;
+  }
+
+  .filter-sidebar {
+    width: 238px;
+    flex: 0 0 238px;
+    min-height: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+    transition: width 0.22s ease, flex-basis 0.22s ease, opacity 0.18s ease, transform 0.22s ease;
+  }
+  body.filter-sidebar-collapsed .filter-sidebar {
+    width: 42px;
+    flex-basis: 42px;
+    overflow: visible;
+  }
+  body.meta-sidebar-collapsed .meta-panel {
+    width: 42px;
+    overflow: visible;
+  }
+  body.filter-sidebar-collapsed .filter-sidebar .side-card,
+  body.meta-sidebar-collapsed .meta-panel > :not(.sidebar-rail) {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+  }
+  .sidebar-rail {
+    display: none;
+    min-height: 140px;
+    width: 36px;
+    border: 1px solid #242442;
+    background: #101020;
+    border-radius: 6px;
+    align-items: center;
+    justify-content: center;
+  }
+  body.filter-sidebar-collapsed .filter-sidebar .sidebar-rail,
+  body.meta-sidebar-collapsed .meta-panel .sidebar-rail {
+    display: flex;
+  }
+  .sidebar-rail button,
+  .sidebar-collapse-btn {
+    border: 1px solid #2a2a4e;
+    background: #121225;
+    color: #9aa;
+    cursor: pointer;
+    font: inherit;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+  }
+  .sidebar-rail button {
+    width: 28px;
+    min-height: 112px;
+    border-radius: 5px;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    writing-mode: vertical-rl;
+  }
+  .sidebar-collapse-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    font-size: 16px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .sidebar-rail button:hover,
+  .sidebar-collapse-btn:hover {
+    color: #fff;
+    border-color: #4FC3F7;
+    background: #17172e;
+  }
+  .traj-section .sidebar-collapse-btn {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 3;
+  }
+  .side-card {
+    background: rgba(0,0,0,0.24);
+    border: 1px solid #1a1a2e;
+    border-radius: 7px;
+    overflow: hidden;
+  }
+  .side-card-header,
+  .filter-group-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    background: #101020;
+    border: 0;
+    color: #ddd;
+    font: inherit;
+    text-align: left;
+  }
+  .side-card-header {
+    padding: 10px 12px;
+    border-bottom: 1px solid #1a1a2e;
+  }
+  .side-card-kicker,
+  .filter-group-title {
+    color: #6f7488;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .side-card-title {
+    color: #e8e8f2;
+    font-size: 13px;
+    font-weight: 800;
+    margin-top: 2px;
+  }
+  .filter-group {
+    border-top: 1px solid rgba(255,255,255,0.055);
+  }
+  .filter-group:first-child { border-top: 0; }
+  .filter-group-toggle {
+    padding: 10px 12px;
+    cursor: pointer;
+  }
+  .filter-group-toggle:hover { background: #15152a; }
+  .filter-group-chevron {
+    color: #4FC3F7;
+    font-size: 14px;
+    transition: transform 0.2s ease;
+  }
+  .filter-group.collapsed .filter-group-chevron { transform: rotate(-90deg); }
+  .filter-group-content {
+    display: grid;
+    gap: 7px;
+    padding: 0 10px 11px;
+    max-height: 260px;
+    overflow: hidden;
+    transition: max-height 0.24s ease, padding-top 0.24s ease, padding-bottom 0.24s ease, opacity 0.18s ease;
+  }
+  .filter-group.collapsed .filter-group-content {
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+  }
+  .filter-sidebar .filter-btn {
+    width: 100%;
+    min-height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-color: #242442;
+    background: #0d0d1a;
+    color: #aaa;
+    text-align: left;
+    font-size: 10px;
+  }
+  .filter-sidebar .filter-btn:hover { border-color: #4FC3F7; color: #e9f8ff; }
+  .filter-sidebar .filter-btn.active { background: #10233a; border-color: #4FC3F7; color: #fff; }
+  .audio-card-body {
+    display: grid;
+    gap: 10px;
+    padding: 10px;
+  }
+  .audio-card-body #muteBtn {
+    justify-content: flex-start;
+    gap: 10px;
+    min-height: 42px;
+    padding: 8px 10px;
+    border-color: #2a2a4e;
+    background: #101020;
+    color: #d8d8e8;
+    font-size: 11px;
+    letter-spacing: 0.6px;
+    text-align: left;
+  }
+  .audio-card-body #muteBtn:hover {
+    border-color: #ffd600;
+    color: #fff;
+  }
+  .audio-card-body #muteBtn.audio-on {
+    border-color: #ffd600;
+    background: rgba(255,214,0,0.1);
+    color: #fff;
+  }
+  .audio-checkbox {
+    width: 24px;
+    height: 24px;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    position: relative;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffd600;
+  }
+  .audio-checkbox::before {
+    content: '';
+    position: absolute;
+    left: 9px;
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 7px solid currentColor;
+  }
+  #muteBtn.audio-on .audio-checkbox::before {
+    left: 7px;
+    width: 3px;
+    height: 11px;
+    border: 0;
+    border-left: 3px solid currentColor;
+    border-right: 3px solid currentColor;
+  }
+  .audio-button-copy {
+    display: grid;
+    gap: 2px;
+  }
+  .audio-button-title {
+    color: inherit;
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+  }
+  .audio-button-subtitle {
+    color: #80869a;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+  #muteBtn.audio-on .audio-button-subtitle { color: #ffd600; }
+  .audio-player-shell {
+    display: grid;
+    gap: 8px;
+    padding: 9px;
+    border: 1px solid #1a1a2e;
+    border-radius: 6px;
+    background: #0d0d1a;
+  }
+  .mission-audio-player {
+    width: 100%;
+    height: 32px;
+    filter: invert(0.9) hue-rotate(170deg) saturate(0.7);
+  }
+  .mission-audio-player.audio-disabled {
+    opacity: 0.42;
+    pointer-events: none;
+  }
+  .audio-control-row {
+    display: grid;
+    gap: 6px;
+  }
+  .audio-control-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #6f7488;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .audio-volume {
+    width: 100%;
+    accent-color: #ffd600;
+    cursor: pointer;
+  }
+  .audio-card-body .audio-now {
+    max-width: none;
+    white-space: normal;
+    line-height: 1.35;
+    min-height: 28px;
+    padding: 8px 9px;
+    border: 1px solid #1a1a2e;
+    border-radius: 5px;
+    background: #0d0d1a;
+    color: #9aa;
+    font-style: normal;
   }
 
   /* Photo side — takes available width, fixed height from flex */
@@ -309,6 +648,20 @@
     min-height: 0;
     overflow: hidden;
     position: relative;
+  }
+  .photo-status-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 28px;
+    flex-shrink: 0;
+  }
+  .photo-counter {
+    color: #4FC3F7;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.7px;
+    font-variant-numeric: tabular-nums;
   }
   .photo-img {
     max-width: 100%;
@@ -441,6 +794,7 @@
     overflow-y: auto;
     min-height: 0;
     max-height: 100%;
+    transition: width 0.22s ease, opacity 0.18s ease, transform 0.22s ease;
   }
   .meta-section {
     padding: 12px;
@@ -793,6 +1147,8 @@
     #header h1 { font-size: 18px; }
     #header .crew { display: none; }
     .timeline-bar { padding: 4px 12px; }
+    .timeline-topline { margin-bottom: 3px; }
+    .timeline-title { font-size: 8px; }
     .timeline-track { height: 34px; }
     .timeline-playhead { top: 0; height: 34px; }
     /* Keep activity bars, audio dots, and day labels visible on mobile */
@@ -805,7 +1161,10 @@
     .zoom-controls { display: none; }
     .timeline-hover-tip { display: none !important; }
     .mobile-activity { display: none; }
-    .controls-row { padding: 6px 12px; gap: 6px; }
+    .controls-row { display: flex; padding: 6px 12px; gap: 6px; }
+    .sidebar-toggle { display: none; }
+    .sidebar-rail,
+    .sidebar-collapse-btn { display: none; }
 
     /* Replace inline filter buttons with a single dropdown trigger + popup */
     .controls-row .filter-btn[data-filter],
@@ -1004,6 +1363,8 @@
       overflow: hidden;
       padding-bottom: calc(min(var(--vh) - var(--sheet-top-y), var(--sheet-middle-h)) + 4px);
     }
+    .filter-sidebar { display: none; }
+    .photo-status-row { min-height: 0; }
     /* Middle snap: let the photo extend slightly past the sheet's top edge
        so a sliver of image peeks through the rounded sheet corners. */
     body.sheet-state-middle .viewer {
@@ -1191,6 +1552,14 @@
 
 <!-- Timeline bar -->
 <div class="timeline-bar">
+  <div class="timeline-topline">
+    <div class="timeline-title">Mission Timeline</div>
+    <div class="zoom-controls" aria-label="Timeline zoom controls">
+      <button class="zoom-btn" id="zoomInBtn" title="Zoom in">+</button>
+      <button class="zoom-btn" id="zoomOutBtn" title="Zoom out">−</button>
+      <button class="zoom-btn" id="zoomResetBtn" title="Reset zoom">⊙</button>
+    </div>
+  </div>
   <div class="timeline-track" id="timelineTrack">
     <div class="timeline-activity-bars" id="activityBars"></div>
     <div class="timeline-photo-dots" id="photoDots"></div>
@@ -1199,11 +1568,6 @@
     <div class="timeline-hover-tip" id="timelineHoverTip">
       <div class="tip-time" id="tipTime"></div>
       <div class="tip-activity" id="tipActivity"></div>
-    </div>
-    <div class="zoom-controls">
-      <button class="zoom-btn" id="zoomInBtn" title="Zoom in">+</button>
-      <button class="zoom-btn" id="zoomOutBtn" title="Zoom out">−</button>
-      <button class="zoom-btn" id="zoomResetBtn" title="Reset zoom">⊙</button>
     </div>
   </div>
   <div class="timeline-labels">
@@ -1220,32 +1584,93 @@
     <span id="filterDropdownLabel">Showing All Photos and Videos</span>
     <span class="filter-dropdown-chevron" aria-hidden="true">&#x2039;</span>
   </button>
+</div>
+
+<!-- Main viewer -->
+<div class="viewer">
+  <aside class="filter-sidebar" id="filterSidebar" aria-label="Filtering and audio controls">
+    <div class="sidebar-rail"><button type="button" data-sidebar="filters" id="filterSidebarRailToggle" aria-pressed="false">Filters</button></div>
+    <div class="side-card">
+      <div class="side-card-header">
+        <div>
+          <div class="side-card-kicker">Mission Controls</div>
+          <div class="side-card-title">Filters</div>
+        </div>
+        <button class="sidebar-collapse-btn" type="button" data-sidebar="filters" id="filterSidebarToggle" aria-label="Collapse filters">‹</button>
+      </div>
+      <div class="filter-group">
+        <button class="filter-group-toggle" type="button" aria-expanded="true">
+          <span class="filter-group-title">View</span>
+          <span class="filter-group-chevron" aria-hidden="true">⌄</span>
+        </button>
+        <div class="filter-group-content">
   <button class="filter-btn active" data-filter="all">All Photos and Video</button>
   <button class="filter-btn" data-filter="spacecraft">Crew Photos Only</button>
   <button class="filter-btn" data-filter="exterior">Spacecraft Exterior</button>
-  <span class="filter-sep">|</span>
+        </div>
+      </div>
+      <div class="filter-group collapsed">
+        <button class="filter-group-toggle" type="button" aria-expanded="false">
+          <span class="filter-group-title">Camera</span>
+          <span class="filter-group-chevron" aria-hidden="true">⌄</span>
+        </button>
+        <div class="filter-group-content">
   <button class="filter-btn cam-filter" data-cam="d5a" title="Nikon D5 body 3500015 — on Orion">D5 #1</button>
   <button class="filter-btn cam-filter" data-cam="d5b" title="Nikon D5 body 3500017 — on Orion">D5 #2</button>
   <button class="filter-btn cam-filter" data-cam="z9" title="Nikon Z 9 body 3920019 — on Orion">Z9</button>
   <button class="filter-btn cam-filter" data-cam="gopro" title="GoPro exterior camera mounted on Orion">GoPro</button>
   <button class="filter-btn cam-filter" data-cam="iphone" title="Crew iPhone 17 Pro Max on Orion">iPhone</button>
-  <span class="filter-sep">|</span>
-  <button class="filter-btn" data-filter="videos">Videos</button>
-  <span class="filter-sep">|</span>
-  <button class="filter-btn" id="muteBtn" title="Toggle mission audio"><span class="audio-checkbox" aria-hidden="true"></span><span>PLAY AUDIO</span></button>
-  <span class="audio-now" id="audioNow"></span>
-  <div class="controls-spacer"></div>
-  <span class="info-text" id="photoCounter">1 / 220</span>
-</div>
-
-<!-- Main viewer -->
-<div class="viewer">
+        </div>
+      </div>
+      <div class="filter-group collapsed">
+        <button class="filter-group-toggle" type="button" aria-expanded="false">
+          <span class="filter-group-title">Media</span>
+          <span class="filter-group-chevron" aria-hidden="true">⌄</span>
+        </button>
+        <div class="filter-group-content">
+          <button class="filter-btn" data-filter="photos"><span class="media-inline">Photos Only</span></button>
+          <button class="filter-btn" data-filter="videos"><span class="media-inline">Videos Only</span></button>
+          <button class="filter-btn" data-filter="withAudio"><span class="media-inline">Moments With Audio</span></button>
+          <button class="filter-btn" data-filter="withDescriptions"><span class="media-inline">Described Entries</span></button>
+        </div>
+      </div>
+    </div>
+    <div class="side-card">
+      <div class="side-card-header">
+        <div>
+          <div class="side-card-kicker">Playback</div>
+          <div class="side-card-title">Audio</div>
+        </div>
+      </div>
+      <div class="audio-card-body">
+        <button class="filter-btn" id="muteBtn" title="Toggle mission audio">
+          <span class="audio-checkbox" aria-hidden="true"></span>
+          <span class="audio-button-copy">
+            <span class="audio-button-title" id="audioToggleTitle">Play Mission Audio</span>
+            <span class="audio-button-subtitle" id="audioToggleSubtitle">Follows the selected moment</span>
+          </span>
+        </button>
+        <div class="audio-player-shell">
+          <audio class="mission-audio-player audio-disabled" id="missionAudioPlayer" controls preload="none" aria-label="Mission audio player"></audio>
+          <div class="audio-control-row">
+            <div class="audio-control-label">
+              <span>Volume</span>
+              <span id="audioVolumeValue">70%</span>
+            </div>
+            <input class="audio-volume" id="audioVolume" type="range" min="0" max="100" value="70" aria-label="Mission audio volume">
+          </div>
+        </div>
+        <span class="audio-now" id="audioNow">Audio is off</span>
+      </div>
+    </div>
+  </aside>
   <div class="photo-side">
     <div class="photo-container">
       <img id="currentPhoto" class="photo-img" alt="Current photo">
       <video id="currentVideo" class="photo-img" style="display:none" controls playsinline preload="none"></video>
       <button class="photo-desc-btn" id="photoDescBtn" type="button" onclick="showDescPopup()" style="display:none">Show Desc</button>
     </div>
+    <div class="photo-status-row"><span class="info-text photo-counter" id="photoCounter">1 / 220</span></div>
     <button class="nav-arrow nav-prev" id="prevBtn" title="Previous photo">‹</button>
     <button class="nav-arrow nav-next" id="nextBtn" title="Next photo">›</button>
     <div class="photo-links">
@@ -1258,11 +1683,13 @@
     </div>
   </div>
   <div class="meta-panel" id="metaPanel">
+    <div class="sidebar-rail"><button type="button" data-sidebar="info" id="infoSidebarRailToggle" aria-pressed="false">Info</button></div>
     <div class="bottom-sheet-handle" id="sheetHandle" role="button" aria-label="Toggle information panel">
       <div class="sheet-handle-bar"></div>
       <div class="sheet-handle-title" id="sheetHandleTitle">Show More Information</div>
     </div>
     <div class="traj-section">
+      <button class="sidebar-collapse-btn" type="button" data-sidebar="info" id="infoSidebarToggle" aria-label="Collapse info">›</button>
       <canvas id="trajCanvas" width="400" height="200"></canvas>
       <div class="traj-label" id="trajLabel"></div>
     </div>
@@ -1979,6 +2406,7 @@ loadPhotoData();
 let currentPhotoIdx = 0;
 let filteredPhotos = PHOTOS;
 let audioMuted = true;
+let audioVolume = 0.7;
 let currentAudio = null;
 let lastAudioClip = null;
 
@@ -2455,24 +2883,49 @@ function getAudioForTimestamp(ts) {
 function updateAudio(ts) {
   const clip = getAudioForTimestamp(ts);
   const audioNow = document.getElementById('audioNow');
+  const player = document.getElementById('missionAudioPlayer');
 
   if (audioMuted || !clip) {
-    audioNow.textContent = '';
-    if (currentAudio) { currentAudio.pause(); currentAudio = null; lastAudioClip = null; }
+    audioNow.textContent = audioMuted ? 'Audio is off' : 'No mission audio at this moment';
+    if (player) {
+      player.pause();
+      if (!clip) player.removeAttribute('src');
+      player.classList.toggle('audio-disabled', audioMuted || !clip);
+    }
+    currentAudio = null;
+    lastAudioClip = null;
+    updateAudioControlState();
     return;
   }
 
-  audioNow.textContent = '🔊 ' + clip.desc;
+  audioNow.textContent = clip.desc;
+  updateAudioControlState(clip);
 
   // Same clip still active — let it keep playing
   if (lastAudioClip === clip.f) return;
 
   // Crossed into a new clip's segment — play it
-  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
-  currentAudio = new Audio(MEDIA_BASE + clip.f.replace(/ /g, '%20'));
-  currentAudio.volume = 0.7;
-  currentAudio.play().catch(() => {});
+  if (!player) return;
+  player.pause();
+  player.src = MEDIA_BASE + clip.f.replace(/ /g, '%20');
+  player.volume = audioVolume;
+  player.classList.remove('audio-disabled');
+  player.play().catch(() => {});
+  currentAudio = player;
   lastAudioClip = clip.f;
+}
+
+function updateAudioControlState(clip) {
+  const title = document.getElementById('audioToggleTitle');
+  const subtitle = document.getElementById('audioToggleSubtitle');
+  if (!title || !subtitle) return;
+  if (audioMuted) {
+    title.textContent = 'Play Mission Audio';
+    subtitle.textContent = 'Follows the selected moment';
+  } else {
+    title.textContent = 'Mute Mission Audio';
+    subtitle.textContent = clip ? 'Now following timeline audio' : 'Waiting for an audio cue';
+  }
 }
 
 // --- Timeline hover tooltip showing activity ---
@@ -2742,6 +3195,27 @@ document.getElementById("currentPhoto").addEventListener("click", toggleFullscre
 
 // --- FILTERS ---
 
+document.querySelectorAll('.filter-group-toggle').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const group = this.closest('.filter-group');
+    if (!group) return;
+    const collapsed = group.classList.toggle('collapsed');
+    this.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+  });
+});
+
+document.querySelectorAll('[data-sidebar]').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const sidebar = this.dataset.sidebar;
+    const className = sidebar === 'info' ? 'meta-sidebar-collapsed' : 'filter-sidebar-collapsed';
+    const collapsed = document.body.classList.toggle(className);
+    document.querySelectorAll('[data-sidebar="' + sidebar + '"]').forEach(toggle => {
+      toggle.classList.toggle('active', !collapsed);
+      toggle.setAttribute('aria-pressed', collapsed ? 'false' : 'true');
+    });
+  });
+});
+
 function clearAllFilters() {
   document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('[data-crew]').forEach(b => b.classList.remove('active'));
@@ -2769,7 +3243,16 @@ document.querySelectorAll('[data-filter]').forEach(btn => {
     clearAllFilters();
     this.classList.add('active');
     const filter = this.dataset.filter;
-    filteredPhotos = filter === 'all' ? PHOTOS : filter === 'videos' ? PHOTOS.filter(p => p.v) : filter === 'exterior' ? PHOTOS.filter(p => p.exterior) : PHOTOS.filter(p => p.sc);
+    filteredPhotos = filter === 'all' ? PHOTOS
+      : filter === 'photos' ? PHOTOS.filter(p => !p.v)
+      : filter === 'videos' ? PHOTOS.filter(p => p.v)
+      : filter === 'withAudio' ? PHOTOS.filter(p => !!getAudioForTimestamp(p.t))
+      : filter === 'withDescriptions' ? PHOTOS.filter(p => {
+          const fid = getFlickrId(p.f);
+          return !!(p.desc || (fid && PHOTO_DESCS[fid]));
+        })
+      : filter === 'exterior' ? PHOTOS.filter(p => p.exterior)
+      : PHOTOS.filter(p => p.sc);
     currentPhotoIdx = 0;
     viewStart = T_START; viewEnd = T_END;
     updatePhoto();
@@ -2807,14 +3290,24 @@ document.getElementById('muteBtn').addEventListener('click', function() {
   document.getElementById('audioDots').style.display = audioMuted ? 'none' : 'block';
   if (audioMuted && currentAudio) {
     currentAudio.pause();
+    currentAudio.classList.add('audio-disabled');
     currentAudio = null;
     lastAudioClip = null;
-    document.getElementById('audioNow').textContent = '';
+    document.getElementById('audioNow').textContent = 'Audio is off';
+    updateAudioControlState();
   } else if (!audioMuted) {
     const photo = filteredPhotos[currentPhotoIdx];
     updateAudio(photo.t);
     renderTimeline();
+  } else {
+    updateAudioControlState();
   }
+});
+
+document.getElementById('audioVolume').addEventListener('input', function() {
+  audioVolume = Number(this.value) / 100;
+  document.getElementById('audioVolumeValue').textContent = this.value + '%';
+  if (currentAudio) currentAudio.volume = audioVolume;
 });
 
 // --- DEEP LINKING ---
@@ -2938,7 +3431,10 @@ function updateFilterDropdownLabel() {
   const parts = [];
   if (dfValue === 'spacecraft') parts.push('Crew Photos');
   else if (dfValue === 'exterior') parts.push('Spacecraft Exterior');
+  else if (dfValue === 'photos') parts.push('Photos Only');
   else if (dfValue === 'videos') parts.push('Videos Only');
+  else if (dfValue === 'withAudio') parts.push('Moments With Audio');
+  else if (dfValue === 'withDescriptions') parts.push('Described Entries');
   if (activeCams.length) {
     parts.push(activeCams.length + ' Camera' + (activeCams.length > 1 ? 's' : ''));
   }

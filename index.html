@@ -794,7 +794,7 @@
   @media (max-width: 768px) {
     /* Mobile bottom-sheet vars — single source of truth for snap points */
     :root {
-      --sheet-handle-h: 44px;
+      --sheet-handle-h: 72px;
       --sheet-middle-h: 192px; /* orion map flush at top + a little chrome */
       /* y-coord of the sheet's top edge; default matches the middle snap so
          pre-JS layout already reserves the right space for the photo. */
@@ -1072,8 +1072,7 @@
       -webkit-overflow-scrolling: touch;
       overscroll-behavior: contain;
       transition: top 0.32s cubic-bezier(0.32, 0.72, 0, 1);
-      /* default = middle */
-      top: calc(var(--vh) - var(--sheet-middle-h));
+      top: calc(var(--vh) - var(--sheet-handle-h) - var(--safe-bottom));
     }
     .meta-panel.sheet-open    { top: 35vh; }
     .meta-panel.sheet-middle  { top: calc(var(--vh) - var(--sheet-middle-h)); }
